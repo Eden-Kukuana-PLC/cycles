@@ -16,7 +16,7 @@ plugins {
 }
 
 rootProject.name = 'cycles'
-include('app', 'list', 'utilities', "models")
+include('app', "models")
 
 project(':models').projectDir = file('libs/models')
 project(":app").projectDir = file("apps/app")
