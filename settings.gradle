@@ -20,5 +20,6 @@ include('app', "models")
 
 project(':models').projectDir = file('libs/models')
 project(":app").projectDir = file("apps/app")
+//project(":mobile").projectDir = file("apps/mobile")
 
 

@@ -1,25 +1,88 @@
-version: '3.1'
-
 services:
   db:
-    image: mysql:latest
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: password
-      MYSQL_DATABASE: mydatabase
-      MYSQL_USER: user
-      MYSQL_PASSWORD: userpassword
+    image: imresamu/postgis:16-3.4-alpine
+    restart: no
     ports:
-      - "3306:3306"
-    expose:
-      - 3306
-#    volumes:
-#      - db-data:/var/lib/mysql
-    healthcheck:
-      test: [ "CMD", "mysqladmin", "ping", "--silent" ]
-      interval: 10s
-      timeout: 5s
-      retries: 5
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    command: [postgres, -c, wal_level=logical]
+    volumes:
+      - db-data:/var/lib/postgresql/data:rw
 
-#volumes:
-#  db-data:
+#  otel-collector:
+#    image: otel/opentelemetry-collector-contrib:0.79.0
+#    command: ["--config=/conf/otel-collector-config.yaml"]
+#    volumes:
+#      - ./.docker/otel-collector-config.yaml:/conf/otel-collector-config.yaml
+#    ports:
+#      - "4317:4317"
+#      - "4318:4318"
+#
+#  tempo:
+#    image: grafana/tempo:2.1.1
+#    command: ["-config.file=/etc/tempo.yaml"]
+#    volumes:
+#      - ./.docker/tempo.yaml:/etc/tempo.yaml
+#    ports:
+#      - "3200:3200"
+#
+#  loki:
+#    image: grafana/loki:2.8.0
+#    ports:
+#      - "3100:3100"
+#    command: -config.file=/etc/loki/local-config.yaml
+#
+#  mimir:
+#    image: grafana/mimir:2.8.0
+#    command: ["-config.file=/etc/mimir.yaml"]
+#    volumes:
+#      - ./.docker/mimir.yaml:/etc/mimir.yaml
+#    ports:
+#      - "9009:9009"
+#
+#  grafana:
+#    image: grafana/grafana:10.0.0
+#    volumes:
+#      - ./.docker/grafana-datasources.yaml:/etc/grafana/provisioning/datasources/datasources.yaml
+#    environment:
+#      - GF_AUTH_ANONYMOUS_ENABLED=true
+#      - GF_AUTH_ANONYMOUS_ORG_ROLE=Admin
+#      - GF_AUTH_DISABLE_LOGIN_FORM=true
+#      - GF_USERS_HOME_PAGE=http://localhost:3050/explore
+#      - GF_FEATURE_TOGGLES_ENABLE=traceqlEditor newTraceViewHeader
+#    ports:
+#      - "3050:3000"
+#    depends_on:
+#      - loki
+#      - mimir
+#      - tempo
+#
+#  eventstore.db:
+#    image: eventstore/eventstore:23.10.0-alpha-arm64v8
+#    environment:
+#      - EVENTSTORE_CLUSTER_SIZE=1
+#      - EVENTSTORE_RUN_PROJECTIONS=All
+#      - EVENTSTORE_START_STANDARD_PROJECTIONS=true
+#      - EVENTSTORE_EXT_TCP_PORT=1113
+#      - EVENTSTORE_HTTP_PORT=2113
+#      - EVENTSTORE_INSECURE=true
+#      - EVENTSTORE_ENABLE_EXTERNAL_TCP=true
+#      - EVENTSTORE_ENABLE_ATOM_PUB_OVER_HTTP=true
+#    ports:
+#      - "1113:1113"
+#      - "2113:2113"
+#    volumes:
+#      - type: volume
+#        source: eventstore-volume-data
+#        target: /var/lib/eventstore
+#      - type: volume
+#        source: eventstore-volume-logs
+#        target: /var/log/eventstore
+
+volumes:
+  db-data:
+  eventstore-volume-data:
+  eventstore-volume-logs:

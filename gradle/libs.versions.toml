@@ -2,14 +2,17 @@
 # https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
 [versions]
 springboot = "3.3.4"
-mysql = "9.0.0"
 lombok = "1.18.34"
+postgresql = "42.7.4"
 
 [libraries]
 spring-boot-starter-web = { module = "org.springframework.boot:spring-boot-starter-web", version.ref = "springboot" }
 spring-boot-starter-data-jpa = { module = "org.springframework.boot:spring-boot-starter-data-jpa", version.ref = "springboot" }
-mysql-connector-j = { module = "com.mysql:mysql-connector-j", version.ref = "mysql" }
 lombok = { module = "org.projectlombok:lombok", version.ref = "lombok" }
+spring-boot-devtools = { module = "org.springframework.boot:spring-boot-devtools", version.ref = "springboot" }
+postgresql = { module = "org.postgresql:postgresql", version.ref = "postgresql" }
+
+
 
 [plugins]
 springboot-framework = { id = "org.springframework.boot", version.ref = "springboot" }

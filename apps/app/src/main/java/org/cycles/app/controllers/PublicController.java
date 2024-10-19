@@ -1,8 +1,8 @@
 package org.cycles.app.controllers;
 
 
-import org.cycles.models.entities.Product;
-import org.cycles.models.services.ProductService;
+import org.cycles.models.entities.User;
+import org.cycles.models.services.UserService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -11,15 +11,14 @@ import java.util.List;
 @RestController
 public class PublicController {
 
-    private final ProductService productService;
+    private final UserService userService;
 
-    public PublicController(ProductService productService) {
-
-        this.productService = productService;
+    public PublicController(UserService userService) {
+        this.userService = userService;
     }
 
-    @GetMapping("/hello")
-    public List<Product> index() {
-        return productService.getProducts();
+    @GetMapping("/users")
+    public List<User> index() {
+        return this.userService.getAllUsers();
     }
 }
